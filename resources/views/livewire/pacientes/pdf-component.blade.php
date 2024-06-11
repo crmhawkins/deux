@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Consentimiento de Protección de Datos</title>
+    <title>Consentimiento</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
         .header { text-align: center; margin-bottom: 50px; position: relative; }
