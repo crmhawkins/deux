@@ -63,7 +63,7 @@
                 <tr>
                     <td colspan="2"></td>
                     <td style="text-align: right;">
-                        <img src="{{ assets('storage/assets/firma/'. $documento->firma) }}" alt="Firma del Paciente">
+                        <img src="{{ asset('storage/assets/firma/'. $documento->firma) }}" alt="Firma del Paciente">
                     </td>
                 </tr>
             </table>
