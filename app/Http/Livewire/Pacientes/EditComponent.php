@@ -178,7 +178,7 @@ class EditComponent extends Component
         $pdf = Pdf::loadView('livewire.pacientes.pdf-component', $datos)->setPaper('a4', 'vertical')->output();
         return response()->streamDownload(
             fn () => print($pdf),
-            'Consentimiento'.$paciente->nombre.'_'.$paciente->apellido.'_'.Carbon::parse($documento->create_at)->format('dd-mm-yyyy').'.pdf'
+            'Consentimiento_'.$paciente->nombre.'_'.$paciente->apellido.'_'.Carbon::parse($documento->create_at)->format('d-m-y').'.pdf'
         );
 
     }
