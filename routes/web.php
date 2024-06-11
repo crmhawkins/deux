@@ -40,13 +40,7 @@ use App\Http\Controllers\ServicioPackController;
 use App\Http\Controllers\MonitorController;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\PacienteController;
-use App\Http\Controllers\ResumenDiaController;
-use App\Http\Controllers\ResumenSemanaController;
-use App\Http\Controllers\ResumenMensualController;
-use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\MapKitController;
-use App\Http\Livewire\Facturas\EditComponent;
-use App\Http\Livewire\Facturas\IndexComponent as FacturasIndexComponent;
 use App\Http\Livewire\Productos\IndexComponent;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\CitaController;
@@ -54,6 +48,7 @@ use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\NewslettersController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\TextoController;
 use UniSharp\LaravelFilemanager\Lfm;
 
 
@@ -244,6 +239,11 @@ Route::group(['middleware' => 'is.admin', 'prefix' => 'admin'], function () {
     Route::get('clients', [ClientsController::class, 'index'])->name('clients.index');
     Route::get('clients/create', [ClientsController::class, 'create'])->name('clients.create');
     Route::get('clients/edit/{id}', [ClientsController::class, 'edit'])->name('clients.edit');
+
+    // textos
+    Route::get('textos', [TextoController::class, 'index'])->name('texto.index');
+    Route::get('textos-create', [TextoController::class, 'create'])->name('texto.create');
+    Route::get('textos-edit/{id}', [TextoController::class, 'edit'])->name('texto.edit');
 
     // Eventos
     Route::get('/eventos', [EventoController::class, 'index'])->name('eventos.index');

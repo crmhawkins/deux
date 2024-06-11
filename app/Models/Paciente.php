@@ -18,6 +18,7 @@ class Paciente extends Model
     protected $fillable = [
         "nombre",
         "apellido",
+        "dni",
         "email",
         "telefono",
         "codigoPostal",
@@ -38,6 +39,7 @@ class Paciente extends Model
      *
      * @var array
      */
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');
@@ -55,6 +57,10 @@ class Paciente extends Model
     public function referidos()
     {
         return $this->hasMany(Paciente::class, 'referido_id');
+    }
+    public function documentos()
+    {
+        return $this->hasMany(Documentos::class, 'paciente_id');
     }
     protected $dates = [
         'created_at', 'updated_at', 'deleted_at',

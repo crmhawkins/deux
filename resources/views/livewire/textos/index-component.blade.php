@@ -2,13 +2,12 @@
     <div class="page-title-box">
         <div class="row align-items-center">
             <div class="col-sm-6">
-                <h4 class="page-title">PACIENTES</h4>
+                <h4 class="page-title">TEXTO DE DOCUMENTACION</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-right">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Pacientes</a></li>
-                    <li class="breadcrumb-item active">Todos los pacientes</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Textos</a></li>
                 </ol>
             </div>
         </div> <!-- end row -->
@@ -19,31 +18,24 @@
         <div class="col-12">
             <div class="card m-b-30">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title">Listado de todos los pacientes</h4>
-                    <p class="sub-title../plugins">Listado completo de todos nuestros pacientes, para editar o ver la informacion completa pulse el boton de Editar en la columna acciones.
+
+                    <h4 class="mt-0 header-title">Listado de todos los textos</h4>
+                    <p class="sub-title../plugins">Listado completo de todos nuestros textos para documentos, para editar o ver la informacion completa pulse el boton de Editar en la columna acciones.
                     </p>
 
-                    @if (count($pacientes) > 0)
+                    @if (count($textos) > 0)
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Apellidos</th>
-                                    <th scope="col">Dni</th>
-                                    <th scope="col">Teléfono</th>
-                                    <th scope="col">Email</th>
+                                    <th scope="col">Titulo </th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($pacientes as $paciente)
+                                @foreach ($textos as $texto)
                                     <tr>
-                                        <td>{{ $paciente->nombre }}</td>
-                                        <td>{{ $paciente->apellido }}</td>
-                                        <td>{{ $paciente->dni }}</td>
-                                        <td>{{ $paciente->telefono }}</td>
-                                        <td>{{ $paciente->email }}</td>
-                                        <td> <a href="pacientes-edit/{{ $paciente->id }}" class="btn btn-primary">Ver</a> </td>
+                                        <td>{{ $texto->titulo }}</td>
+                                        <td> <a href="textos-edit/{{ $texto->id }}" class="btn btn-primary">Ver</a> </td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -2,12 +2,16 @@
 
 namespace App\Http\Livewire\Pacientes;
 
-use App\Models\Aseguradora;
-use App\Models\Empresa;
-use App\Models\Paciente;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Models\Documentos;
 use Livewire\Component;
+use App\Models\Paciente;
+use App\Models\Textos;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class EditComponent extends Component
 {
@@ -16,44 +20,37 @@ class EditComponent extends Component
     public $identificador;
     public $nombre;
     public $apellido;
+    public $dni;
     public $email;
     public $telefono;
-    public $codigoPostal;
     public $direccion;
-    public $poblacion;
-    public $provincia;
-    public $estado_id;
-    public $referido_id;
-    public $empresa_id;
-    public $aseguradora_id;
-    public $origen;
-    public $newsletter;
-    public $aseguradoras;
-    public $empresas;
-    public $pacientes;
+    public $documentos;
+    public $textos;
+    public $texto_id;
+    public $textoSeleccionado;
+    public $tituloSeleccionado;
+    public $firma;
+
 
     public function mount()
     {
         $paciente = Paciente::find($this->identificador);
-        $this->aseguradoras = Aseguradora::all();
-        $this->empresas = Empresa::all();
-        $this->pacientes = Paciente::all();
         $this->nombre = $paciente->nombre;
         $this->apellido = $paciente->apellido;
         $this->email = $paciente->email;
+        $this->dni = $paciente->dni;
         $this->telefono = $paciente->telefono;
-        $this->codigoPostal = $paciente->codigoPostal;
         $this->direccion = $paciente->direccion;
-        $this->poblacion = $paciente->poblacion;
-        $this->provincia = $paciente->provincia;
-        $this->estado_id = $paciente->estado_id;
-        $this->referido_id = $paciente->referido_id;
-        $this->empresa_id = $paciente->empresa_id;
-        $this->aseguradora_id = $paciente->aseguradora_id;
-        $this->origen = $paciente->origen;
-        $this->newsletter = $paciente->newsletter;
+        $this->documentos = $paciente->documentos()->get();
+        $this->textos= Textos::all();
+        $this->textoSeleccionado = '';
+        $this->firma = '';
     }
 
+    public function updatedTextoId($value){
+        $this->textoSeleccionado = $this->textos->find($value)->texto;
+        $this->tituloSeleccionado = $this->textos->find($value)->titulo;
+    }
     public function render()
     {
         return view('livewire.pacientes.edit-component');
@@ -68,16 +65,8 @@ class EditComponent extends Component
             'apellido'=> 'nullable',
             "email"=> 'nullable',
             "telefono"=> 'nullable',
-            "codigoPostal"=> 'nullable',
+            "dni"=> 'nullable',
             "direccion"=> 'nullable',
-            "poblacion"=> 'nullable',
-            "provincia"=> 'nullable',
-            "referido_id"=> 'nullable',
-            "empresa_id"=> 'nullable',
-            "aseguradora_id"=> 'nullable',
-            "origen"=> 'nullable',
-            "newsletter"=> 'nullable',
-            "estado_id"=> 'nullable',
         ],
             // Mensajes de error
             [
@@ -93,16 +82,9 @@ class EditComponent extends Component
             'apellido'=>$this->apellido,
             'email' => $this->email,
             'telefono' => $this->telefono,
-            'codigoPostal' => $this->codigoPostal,
+            'dni' => $this->dni,
             "direccion"=> $this->direccion,
-            "poblacion"=> $this->poblacion,
-            "provincia"=> $this->provincia,
-            "referido_id"=> $this->referido_id,
-            "empresa_id"=> $this->empresa_id,
-            "aseguradora_id"=> $this->aseguradora_id,
-            "origen"=> $this->origen,
-            "newsletter"=> $this->newsletter,
-            "estado_id"=> $this->estado_id,
+
         ]);
         event(new \App\Events\LogEvent(Auth::user(), 9, $paciente->id));
 
@@ -130,8 +112,7 @@ class EditComponent extends Component
     }
 
       // Eliminación
-      public function destroy(){
-
+    public function destroy(){
         $this->alert('warning', '¿Seguro que desea borrar el paciente? No hay vuelta atrás', [
             'position' => 'center',
             'timer' => 3000,
@@ -143,7 +124,17 @@ class EditComponent extends Component
             'denyButtonText' => 'No',
             'timerProgressBar' => true,
         ]);
+    }
 
+    public function confirmDeleteDoc($id)
+    {
+        $document = Documentos::find($id);
+        $document->delete();
+        $this->refresh();
+    }
+    public function refresh()
+    {
+        $this->dispatchBrowserEvent('refresh-page');
     }
 
     // Función para cuando se llama a la alerta
@@ -153,7 +144,10 @@ class EditComponent extends Component
             'confirmed',
             'update',
             'destroy',
-            'confirmDelete'
+            'confirmDelete',
+            'saveSignature',
+            'confirmDeleteDoc',
+            'refresh'
         ];
     }
 
@@ -171,6 +165,64 @@ class EditComponent extends Component
         event(new \App\Events\LogEvent(Auth::user(), 10, $cliente->id));
         $cliente->delete();
         return redirect()->route('pacientes.index');
+    }
+    public function descargar($id)
+    {
+        $documento = Documentos::find($id);
+        $paciente = Paciente::find($this->identificador);
+        $dia = Carbon::parse($documento->create_at)->day;
+        $mes = Carbon::parse($documento->create_at)->locale('es')->translatedFormat('F');
+        $año = Carbon::parse($documento->create_at)->year;
+        $datos =  ['paciente' => $paciente,  'documento' => $documento,'dia' => $dia,'mes' => $mes,'año' => $año];
 
+        $pdf = Pdf::loadView('livewire.pacientes.pdf-component', $datos)->setPaper('a4', 'vertical')->output(); //
+        return response()->streamDownload(
+            fn () => print($pdf),
+            'export_protocol.pdf'
+        );
+
+    }
+
+    public function saveSignature($data)
+    {        // Procesa la imagen recibida y guárdala o haz lo que necesites con ella
+        $this->firma = $data;
+
+        // Aquí puedes guardar la firma en la base de datos o realizar otras acciones
+        // Ejemplo: guardar en un archivo
+        $image = str_replace('data:image/png;base64,', '', $data);
+        $image = str_replace(' ', '+', $image);
+        $timestamp = now()->timestamp;
+        $uniqueId = Str::uuid();
+        $imageName = 'firma_' . $this->identificador . '_' . $timestamp . '_' . $uniqueId . '.png';
+
+        Storage::disk('public')->put('assets/firma/'.$imageName, base64_decode($image));
+
+        // Asocia la imagen guardada con el paciente si es necesario
+        $documento = Documentos::create([
+            'texto'  => $this->textoSeleccionado,
+            'paciente_id'=> $this->identificador,
+            'titulo' => $this->tituloSeleccionado,
+            'firma'  => $imageName,
+
+        ]);
+
+
+        if ($documento) {
+            $this->alert('success', 'Documento firmado correctamente!', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => false,
+                'showConfirmButton' => true,
+                'onConfirmed' => 'refresh',
+                'confirmButtonText' => 'OK',
+                'timerProgressBar' => true,
+            ]);
+        } else {
+            $this->alert('error', '¡No se ha podido firma la documentacion!', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => false,
+            ]);
+        }
     }
 }

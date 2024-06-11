@@ -1,55 +1,42 @@
 <?php
 
-namespace App\Http\Livewire\Pacientes;
+namespace App\Http\Livewire\Textos;
 
-use App\Models\Aseguradora;
-use App\Models\Empresa;
-use App\Models\Paciente;
+use App\Models\Textos;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
 
 class CreateComponent extends Component
 {
-
     use LivewireAlert;
 
-    public $nombre;
-    public $apellido;
-    public $dni;
-    public $email;
-    public $telefono;
-    public $direccion;
+    public $titulo;
+    public $texto;
 
 
     public function render()
     {
-        return view('livewire.pacientes.create-component');
+        return view('livewire.textos.create-component');
     }
-
     // Al hacer submit en el formulario
     public function submit()
     {
         // Validación de datos
         $validatedData = $this->validate(
             [
-                'nombre'=> 'required',
-                'apellido'=> 'nullable',
-                'dni'=> 'nullable',
-                "email"=> 'nullable',
-                "telefono"=> 'nullable',
-                "codigoPostal"=> 'nullable',
-                "direccion"=> 'nullable',
+                'titulo'=> 'required',
+                'texto'=> 'nullable',
+
             ],
             // Mensajes de error
             [
-                'nombre.required' => 'El nombre es obligatorio.',
+                'titulo.required' => 'El titulo es obligatorio.',
             ]
-        );
+            );
 
         // Guardar datos validados
-        $clienteSave = Paciente::create(
+        $clienteSave = Textos::create(
             $validatedData
         );
 
@@ -57,7 +44,7 @@ class CreateComponent extends Component
 
         // Alertas de guardado exitoso
         if ($clienteSave) {
-            $this->alert('success', '¡Paciente registrado correctamente!', [
+            $this->alert('success', '!Texto registrado correctamente!', [
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => false,
@@ -67,7 +54,7 @@ class CreateComponent extends Component
                 'timerProgressBar' => true,
             ]);
         } else {
-            $this->alert('error', '¡No se ha podido guardar la información del paciente!', [
+            $this->alert('error', '¡No se ha podido guardar la información del documento!', [
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => false,
@@ -75,7 +62,7 @@ class CreateComponent extends Component
         }
     }
 
-    // Función para cuando se llama a la alerta
+     // Función para cuando se llama a la alerta
     public function getListeners()
     {
         return [
@@ -88,6 +75,6 @@ class CreateComponent extends Component
     public function confirmed()
     {
         // Do something
-        return redirect()->route('pacientes.index');
+        return redirect()->route('texto.index');
     }
 }
