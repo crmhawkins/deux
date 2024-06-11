@@ -175,10 +175,10 @@ class EditComponent extends Component
         $año = Carbon::parse($documento->create_at)->year;
         $datos =  ['paciente' => $paciente,  'documento' => $documento,'dia' => $dia,'mes' => $mes,'año' => $año];
 
-        $pdf = Pdf::loadView('livewire.pacientes.pdf-component', $datos)->setPaper('a4', 'vertical')->output(); //
+        $pdf = Pdf::loadView('livewire.pacientes.pdf-component', $datos)->setPaper('a4', 'vertical')->output();
         return response()->streamDownload(
             fn () => print($pdf),
-            'Consentimiento'.$paciente->nombre.'_'.$paciente->apellido.'_'.Carbon::parse($documento->create_at)->format('dd/mm/yyyy').'.pdf'
+            'Consentimiento'.$paciente->nombre.'_'.$paciente->apellido.'_'.Carbon::parse($documento->create_at)->format('dd-mm-yyyy').'.pdf'
         );
 
     }
