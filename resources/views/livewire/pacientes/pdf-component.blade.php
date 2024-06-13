@@ -11,7 +11,7 @@
         .clinic-info { text-align: right; margin-top: -40px; }
         .clinic-info h3 { margin: 0; }
         .clinic-info p { margin: 0; line-height: 1.2; }
-        .content { margin-top: 30px; text-align: justify; }
+        .content { margin-top: 30px;}
         .info-signature { page-break-inside: avoid; display: inline-block; width: 100%; margin-top: 50px; }
         .info-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .info-table td { padding: 5px; }
