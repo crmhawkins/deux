@@ -303,6 +303,19 @@
             penColor: 'rgb(0, 0, 0)'
         });
 
+                function preventDefault(e) {
+                e.preventDefault();
+            }
+
+            canvas.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                document.body.addEventListener('touchmove', preventDefault, { passive: false });
+            });
+
+            canvas.addEventListener('touchend', function() {
+                document.body.removeEventListener('touchmove', preventDefault, { passive: false });
+            });
+
         // Opcional: Agrega botones y funcionalidades para guardar o limpiar la firma
         document.getElementById('clear-button').addEventListener('click', function () {
             signaturePad.clear();
@@ -331,6 +344,8 @@
             modal.style.display = "none";
         }
     });
+
+
 
         $("#alertaGuardar").on("click", () => {
             Swal.fire({
