@@ -91,17 +91,35 @@
             });
         });
     </script>
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var editor = CKEDITOR.replace('texto');
-            editor.on('instanceReady', function() {
-                // Carga el contenido inicial cuando el editor está listo
-                this.setData(@this.texto);
-            });
-
-            // Actualizar el texto de Livewire cuando el editor pierde el foco
-            editor.on('blur', function() {
-                @this.set('texto', this.getData());
+            // Reemplaza 'texto' con la configuración personalizada de la barra de herramientas
+            var editor = CKEDITOR.replace('texto', {
+                toolbar: [
+                    { name: 'document', items: ['Source', '-', 'NewPage', 'Preview', 'Print', '-', 'Templates'] },
+                    { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+                    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+                    '/',
+                    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+                    { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language'] },
+                    { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+                    { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak'] },
+                    '/',
+                    { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+                    { name: 'colors', items: ['TextColor', 'BGColor'] },
+                    { name: 'tools', items: ['Maximize', 'ShowBlocks'] }
+                ],
+                height: 400,
+                on: {
+                    instanceReady: function() {
+                        // Carga el contenido inicial cuando el editor está listo
+                        this.setData(@this.texto);
+                    },
+                    blur: function() {
+                        // Actualizar el texto de Livewire cuando el editor pierde el foco
+                        @this.set('texto', this.getData());
+                    }
+                }
             });
         });
     </script>
