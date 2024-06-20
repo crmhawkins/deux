@@ -61,9 +61,9 @@ class EditComponent extends Component
     {
         // Validación de datos
         $this->validate([
-            'nombre'=> 'nullable',
-            'apellido'=> 'nullable',
-            "email"=> 'nullable',
+            'nombre'=> 'required',
+            'apellido'=> 'required',
+            "email"=> 'required',
             "telefono"=> 'nullable',
             "dni"=> 'nullable',
             "direccion"=> 'nullable',
@@ -71,6 +71,8 @@ class EditComponent extends Component
             // Mensajes de error
             [
                 'nombre.required' => 'El nombre es obligatorio.',
+                'apellido.required' => 'El apellido es obligatorio.',
+                'dni.required' => 'El DNI es obligatorio.',
             ]);
 
         // Encuentra el identificador
@@ -168,6 +170,7 @@ class EditComponent extends Component
     }
     public function descargar($id)
     {
+
         $documento = Documentos::find($id);
         $paciente = Paciente::find($this->identificador);
         $dia = Carbon::parse($documento->create_at)->day;
@@ -176,6 +179,7 @@ class EditComponent extends Component
         $datos =  ['paciente' => $paciente,  'documento' => $documento,'dia' => $dia,'mes' => $mes,'año' => $año];
 
         $pdf = Pdf::loadView('livewire.pacientes.pdf-component', $datos)->setPaper('a4', 'vertical')->output();
+
         return response()->streamDownload(
             fn () => print($pdf),
             'Consentimiento_'.$paciente->nombre.'_'.$paciente->apellido.'_'.Carbon::parse($documento->create_at)->format('d-m-y').'.pdf'

@@ -43,11 +43,10 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
+                                <div class="col-sm-12" wire:ignore>
                                     <label for="example-text-input" class="col-sm-12 col-form-label">Texto</label>
                                     <div class="col-sm-12">
-                                        <textarea type="text" wire:model.lazy="texto" class="form-control" name="apellido"
-                                        id="apellido" placeholder="Texto para genearar documentos"></textarea>
+                                        <textarea id="texto" name="texto"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -73,8 +72,12 @@
 </div>
 
 @section('scripts')
+<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
     <script>
         $("#alertaGuardar").on("click", () => {
+            const editorData = CKEDITOR.instances.texto.getData();
+            @this.set('texto', editorData);
+
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'Pulsa el botón de confirmar para guardar el Texto.',
@@ -87,6 +90,19 @@
                 }
             });
         });
+    </script>
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var editor = CKEDITOR.replace('texto');
+            editor.on('instanceReady', function() {
+                // Carga el contenido inicial cuando el editor está listo
+                this.setData(@this.texto);
+            });
 
+            // Actualizar el texto de Livewire cuando el editor pierde el foco
+            editor.on('blur', function() {
+                @this.set('texto', this.getData());
+            });
+        });
     </script>
 @endsection

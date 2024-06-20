@@ -12,7 +12,7 @@ class CreateComponent extends Component
     use LivewireAlert;
 
     public $titulo;
-    public $texto;
+    public $texto = '';
 
 
     public function render()

@@ -33,8 +33,14 @@
                                     <div class="col-sm-12">
                                         <input type="text" wire:model.lazy="nombre" class="form-control" name="nombre"
                                             id="nombre" aria-label="Nombre" placeholder="Nombre">
-
-
+                                        @error('nombre')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        <style>
+                                            .text-danger {
+                                                color: red;
+                                            }
+                                            </style>
+                                    @enderror
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -44,9 +50,8 @@
                                         id="apellido" placeholder="Apellidos">
                                         @error('apellido')
                                         <span class="text-danger">{{ $message }}</span>
-
                                         <style>
-                                            .apellido {
+                                            .text-danger {
                                                 color: red;
                                             }
                                             </style>
@@ -58,11 +63,11 @@
                                     <div class="col-sm-12">
                                         <input type="text" wire:model.lazy="dni" class="form-control" name="dni"
                                         id="dni" placeholder="DNI">
-                                        @error('apellido')
+                                        @error('dni')
                                         <span class="text-danger">{{ $message }}</span>
 
                                         <style>
-                                            .apellido {
+                                            .text-danger {
                                                 color: red;
                                             }
                                             </style>

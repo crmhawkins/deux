@@ -12,15 +12,15 @@
         .clinic-info h3 { margin: 0; }
         .clinic-info p { margin: 0; line-height: 1.2; }
         .content { margin-top: 30px;}
+        .content h1 { text-align: center; }
         .info-signature { page-break-inside: avoid; display: inline-block; width: 100%; margin-top: 50px; }
         .info-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .info-table td { padding: 5px; }
-        .signature { margin-top: 30px; }
         .signature-table { width: 100%; border-collapse: collapse; }
         .signature-table td { padding: 10px; }
+        .signature { margin-top: 30px; }
         .signature img { width: 200px; margin-top: 10px; }
         .signature p { margin: 0; }
-        .content h1 { text-align: center; }
     </style>
 </head>
 <body>
@@ -38,7 +38,7 @@
     </div>
     <div class="content">
         <h1>{{$documento->titulo}}</h1>
-        <p style="white-space: pre-line;">{{$documento->texto}}</p>
+            {!!$documento->texto!!}
     </div>
     <div class="info-signature">
         <div class="info">

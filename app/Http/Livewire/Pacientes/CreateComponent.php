@@ -35,16 +35,17 @@ class CreateComponent extends Component
         $validatedData = $this->validate(
             [
                 'nombre'=> 'required',
-                'apellido'=> 'nullable',
-                'dni'=> 'nullable',
+                'apellido'=> 'required',
+                'dni'=> 'required',
                 "email"=> 'nullable',
                 "telefono"=> 'nullable',
-                "codigoPostal"=> 'nullable',
                 "direccion"=> 'nullable',
             ],
             // Mensajes de error
             [
                 'nombre.required' => 'El nombre es obligatorio.',
+                'apellido.required' => 'El apellido es obligatorio.',
+                'dni.required' => 'El DNI es obligatorio.',
             ]
         );
 

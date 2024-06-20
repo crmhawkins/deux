@@ -36,7 +36,7 @@
                                         @error('nombre')
                                             <span class="text-danger">{{ $message }}</span>
                                             <style>
-                                                .nombre {
+                                                .text-danger {
                                                     color: red;
                                                 }
                                             </style>
@@ -52,7 +52,7 @@
                                         <span class="text-danger">{{ $message }}</span>
 
                                         <style>
-                                            .apellido {
+                                            .text-danger {
                                                 color: red;
                                             }
                                             </style>
@@ -64,11 +64,11 @@
                                     <div class="col-sm-12">
                                         <input type="text" wire:model.lazy="dni" class="form-control" name="dni"
                                         id="dni" placeholder="DNI">
-                                        @error('apellido')
+                                        @error('dni')
                                         <span class="text-danger">{{ $message }}</span>
 
                                         <style>
-                                            .apellido {
+                                            .text-danger {
                                                 color: red;
                                             }
                                             </style>
@@ -85,9 +85,8 @@
                                             name="email" id="email" placeholder="Email">
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
-
                                             <style>
-                                                .tipoCalle {
+                                                .text-danger {
                                                     color: red;
                                                 }
                                             </style>
@@ -101,9 +100,8 @@
                                             id="telefono" placeholder="Télefono">
                                         @error('telefono')
                                             <span class="text-danger">{{ $message }}</span>
-
                                             <style>
-                                                .calle {
+                                                .text-danger {
                                                     color: red;
                                                 }
                                             </style>
@@ -117,9 +115,8 @@
                                             name="direccion" id="direccion" placeholder="Direccion">
                                         @error('direccion')
                                             <span class="text-danger">{{ $message }}</span>
-
                                             <style>
-                                                .ciudad {
+                                                .text-danger {
                                                     color: red;
                                                 }
                                             </style>
@@ -212,7 +209,7 @@
                         <label for="texto_id" class="form-label">Texto</label>
                         <div class="card">
                             <div class="card-body">
-                                <p style="white-space: pre-line;">{{ $textoSeleccionado }}</p>
+                                {!! $textoSeleccionado !!}
                             </div>
                         </div>
                     </div>

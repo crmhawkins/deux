@@ -43,11 +43,10 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
+                                <div class="col-sm-12" wire:ignore>
                                     <label for="example-text-input" class="col-sm-12 col-form-label">Texto</label>
-                                    <div class="col-sm-12">
-                                        <textarea type="text" wire:model.lazy="texto" class="form-control" name="apellido"
-                                        id="apellido" placeholder="Texto para genearar documentos"></textarea>
+                                    <div class="col-sm-12" >
+                                        <textarea id="texto" name="texto"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -73,8 +72,12 @@
 </div>
 
 @section('scripts')
+<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
     <script>
-        $("#alertaGuardar").on("click", () => {
+       $("#alertaGuardar").on("click", () => {
+            const editorData = CKEDITOR.instances.texto.getData();
+            @this.set('texto', editorData);
+
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: 'Pulsa el botón de confirmar para guardar el Texto.',
@@ -87,6 +90,14 @@
                 }
             });
         });
-
+    </script>
+    <script>
+        CKEDITOR.replace('texto', {
+            on: {
+                blur: function( evt ) {
+                    @this.set('texto', evt.editor.getData());
+                }
+            }
+        });
     </script>
 @endsection
