@@ -21,6 +21,7 @@ class CreateComponent extends Component
     public $email;
     public $telefono;
     public $direccion;
+    public $estado_id = 3;
 
 
     public function render()
