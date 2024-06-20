@@ -41,6 +41,7 @@ class CreateComponent extends Component
                 "email"=> 'nullable',
                 "telefono"=> 'nullable',
                 "direccion"=> 'nullable',
+                "estado_id"=> 'required'
             ],
             // Mensajes de error
             [
